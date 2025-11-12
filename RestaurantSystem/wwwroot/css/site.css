@@ -1,22 +1,52 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
+/* Font familje */
 body {
-  margin-bottom: 60px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+}
+
+/* Hero */
+.hero {
+    background-attachment: fixed;
+}
+
+/* Butonat */
+.btn-warning {
+    background: linear-gradient(45deg, #ffc107, #ffb300);
+    border: none;
+}
+
+    .btn-warning:hover {
+        background: linear-gradient(45deg, #e0a800, #ffb300);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255, 193, 7, 0.4);
+    }
+
+/* Navbar */
+.navbar {
+    backdrop-filter: blur(10px);
+    background-color: rgba(33, 37, 41, 0.95) !important;
+}
+
+/* Footer */
+footer a {
+    color: #ffc107;
+    text-decoration: none;
+}
+
+    footer a:hover {
+        color: #fff;
+    }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero .lead {
+        font-size: 1.2rem;
+    }
 }
