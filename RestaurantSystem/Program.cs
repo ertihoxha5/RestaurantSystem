@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RestaurantSystem.Data;
+//using MyProject.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
