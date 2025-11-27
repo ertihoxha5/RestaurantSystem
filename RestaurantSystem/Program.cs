@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MyProject.Data;
 using RestaurantSystem.Data;
 //using MyProject.Data;
 
