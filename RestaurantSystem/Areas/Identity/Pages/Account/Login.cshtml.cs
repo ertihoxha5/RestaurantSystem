@@ -122,7 +122,7 @@ namespace RestaurantSystem.Areas.Identity.Pages.Account
                     var roles = await _userManager.GetRolesAsync(user);
                     if (roles.Contains("Admin"))
                     {
-                        return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+                        return RedirectToAction("Dashboard", "Admin");
                     }
 
                     if (roles.Contains("Client"))

@@ -1,0 +1,99 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container mt-5 pt-4">
+
+    <!-- DASHBOARD CARDS -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <h5>Total Users</h5>
+                <h2 class="text-primary">1,245</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <h5>Active Orders</h5>
+                <h2 class="text-success">312</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <h5>Pending Tickets</h5>
+                <h2 class="text-warning">24</h2>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center p-3">
+                <h5>Revenue Today</h5>
+                <h2 class="text-danger">$1,892</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RECENT ACTIVITY TABLE -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-dark text-white">
+            Recent User Activity
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>User</th>
+                        <th>Action</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>John Doe</td>
+                        <td>Created an Order</td>
+                        <td>2025-01-14</td>
+                        <td><span class="badge bg-success">Completed</span></td>
+                    </tr>
+                    <tr>
+                        <td>Maria Smith</td>
+                        <td>Updated Profile</td>
+                        <td>2025-01-14</td>
+                        <td><span class="badge bg-info">Info</span></td>
+                    </tr>
+                    <tr>
+                        <td>Michael Lee</td>
+                        <td>Payment Failed</td>
+                        <td>2025-01-14</td>
+                        <td><span class="badge bg-danger">Failed</span></td>
+                    </tr>
+                    <tr>
+                        <td>Sara Wilson</td>
+                        <td>Requested Support</td>
+                        <td>2025-01-13</td>
+                        <td><span class="badge bg-warning text-dark">Pending</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ANNOUNCEMENTS -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            Announcements
+        </div>
+        <div class="card-body">
+            <ul>
+                <li>New dashboard update rolling out next week.</li>
+                <li>System maintenance scheduled for 15 February.</li>
+                <li>Performance improvements added to user analytics.</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
