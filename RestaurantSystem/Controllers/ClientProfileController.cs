@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestaurantSystem.Models;
 using MyProject.Data;
+using RestaurantSystem.Models.ViewModels;
+
 namespace RestaurantSystem.Controllers
 {
     [Authorize]
@@ -61,6 +63,41 @@ namespace RestaurantSystem.Controllers
             await _context.SaveChangesAsync();
             ViewBag.Message = "Profile updated successfully!";
             return View(profile);
+        }
+
+        public IActionResult ChangePassword()
+        {
+            return View(new ChangePasswordViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if(!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.GetUserAsync(User);
+
+            var result = await _userManager.ChangePasswordAsync(
+                user,
+                model.CurrentPassword,
+                model.NewPassword
+                );
+
+            if (!result.Succeeded)
+            {
+                foreach(var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+
+                }
+                return View(model);
+
+            }
+            TempData["Message"] = "Password changed successfully.";
+            return RedirectToAction("Index");
         }
     }
 }
