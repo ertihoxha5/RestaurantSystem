@@ -6,7 +6,7 @@
                 <i class="bi bi-person-circle"></i> @User.Identity.Name
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" asp-controller="Profile" asp-action="Index"><i class="bi bi-person"></i> Profili</a></li>
+                <li><a class="dropdown-item" asp-controller="Admin" asp-action="Profile"><i class="bi bi-person"></i> Profili</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
                   <form asp-area="Identity" asp-page="/Account/Logout" method="post">

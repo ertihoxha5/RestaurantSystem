@@ -15,47 +15,34 @@
                     {
                         <div class="alert alert-success text-center">@ViewBag.Message</div>
                     }
-
                     <form asp-action="Index" method="post">
                         <div class="mb-3">
                             <label asp-for="FirstName" class="form-label"></label>
-                            <input asp-for="FirstName" class="form-control" placeholder="First Name" />
+                            <input asp-for="FirstName" class="form-control" placeholder="First Name"/>
                             <span asp-validation-for="FirstName" class="text-danger"></span>
-
                         </div>
                         <div class="mb-3">
                             <label asp-for="LastName" class="form-label"></label>
-                            <input asp-for="LastName" class="form-control" placeholder="Last Name" />
+                            <input asp-for="LastName" class="form-control" placeholder="Last Name"/>
                             <span asp-validation-for="LastName" class="text-danger"></span>
-
                         </div>
                         <div class="mb-3">
                             <label asp-for="Address" class="form-label"></label>
-                            <input asp-for="Address" class="form-control" placeholder="Address" />
+                            <input asp-for="Address" class="form-control" placeholder="Address"/>
                             <span asp-validation-for="Address" class="text-danger"></span>
-
                         </div>
                         <div class="mb-3">
                             <label asp-for="PhoneNumber" class="form-label"></label>
-                            <input asp-for="PhoneNumber" class="form-control" placeholder="PhoneNumber" />
+                            <input asp-for="PhoneNumber" class="form-control" placeholder="PhoneNumber"/>
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">
-                            Save Changes
-                        </button>
+                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
                         <div class="text-center mt-3">
-                            <a asp-action="ChangePassword" class="btn btn-outline-secondary btn-sm">
-                                Change Password
-                            </a>
+                            <a asp-action="ChangePassword" class="btn btn-outline-secondary btn-sm">Change Password</a>
                         </div>
-
                     </form>
-
                 </div>
-
             </div>
-
         </div>
     </div>
 </div>

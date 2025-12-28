@@ -1,0 +1,32 @@
+﻿@model List<RestaurantSystem.Models.ViewModels.UserListVM>
+
+@{
+    ViewData["Title"] = "Users Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>Users</h3>
+    <a asp-action="Create" class="btn btn-success">Add New User</a>
+</div>
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th style="width:180px">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.Email</td>
+                <td>@(u.PhoneNumber ?? "-")</td>
+                <td>@u.Role</td>
+                <td><a asp-action="Edit" asp-route-id="@u.Id" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@u.Id" class="btn btn-danger btn-sm">Delete</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

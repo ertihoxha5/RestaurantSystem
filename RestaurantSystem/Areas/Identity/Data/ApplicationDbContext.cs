@@ -13,6 +13,8 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
     }
     public DbSet<ClientProfile> ClientProfiles { get; set; }
+    public DbSet<AdminProfile> AdminProfiles { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
