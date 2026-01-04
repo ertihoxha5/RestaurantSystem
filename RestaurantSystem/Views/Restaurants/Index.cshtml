@@ -1,0 +1,42 @@
+﻿@model IEnumerable<RestaurantSystem.Models.Restaurant>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>Restaurants</h3>
+    <a asp-action="Create" class="btn btn-success">Add New Restaurant</a>
+</div>
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Description</th>
+            <th>View Tables</th>
+            <th style="width:180px">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.Name</td>
+                <td>@u.Location</td>
+                <td>@u.Description</td>
+                <td>
+                    <a asp-controller="Tables" asp-action="Index" asp-route-restaurantId="@u.Id" class="btn btn-secondary btn-sm">Tables</a>
+
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@u.Id" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@u.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

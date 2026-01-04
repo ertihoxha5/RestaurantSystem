@@ -14,6 +14,9 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     }
     public DbSet<ClientProfile> ClientProfiles { get; set; }
     public DbSet<AdminProfile> AdminProfiles { get; set; }
+    public DbSet<Restaurant> Restaurants { get; set; }
+    public DbSet<Table> Tables { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -23,6 +26,10 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
            .WithOne()
            .HasForeignKey<ClientProfile>(p => p.UserId)
            .OnDelete(DeleteBehavior.Cascade);
+        builder.Entity<Table>()
+            .HasIndex(t => new { t.RestaurantId, t.TableNumber })
+            .IsUnique();
+
         // Customize the ASP.NET Identity model and override the defaults if needed.
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);

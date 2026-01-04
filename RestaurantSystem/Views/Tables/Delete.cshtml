@@ -1,0 +1,53 @@
+﻿@model RestaurantSystem.Models.Table
+
+@{
+    ViewData["Title"] = "Delete Table";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h3>@ViewBag.RestaurantName's Table</h3>
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Delete Table</h4>
+        </div>
+
+        <div class="card-body">
+
+            <h5 class="text-danger mb-4">Are you sure you want to delete this table?</h5>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Table Number</label>
+                <input class="form-control" value="@Model.TableNumber" disabled />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Capacity</label>
+                <input class="form-control" value="@Model.Capacity" disabled />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Restaurant</label>
+                <input class="form-control" value="@Model.Restaurant?.Location" disabled />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Status</label>
+                <input class="form-control" value="@Model.Status" disabled />
+            </div>
+
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="Id" />
+
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-danger px-4 me-2">Delete</button>
+                    <a asp-action="Index" asp-route-restaurantId="@Model.RestaurantId" class="btn btn-secondary px-4">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Index" asp-route-restaurantId="@Model.RestaurantId" class="text-decoration-none">← Back to List</a>
+    </div>
+</div>

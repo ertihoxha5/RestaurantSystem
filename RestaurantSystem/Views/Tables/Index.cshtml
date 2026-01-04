@@ -1,0 +1,70 @@
+﻿@model IEnumerable<RestaurantSystem.Models.Table>
+
+@{
+    ViewData["Title"] = "Tables Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>@ViewBag.RestaurantName's Tables</h3>
+
+    <a asp-action="Create" asp-route-restaurantId="@ViewBag.RestaurantId" class="btn btn-success">
+        Add New Table
+    </a>
+</div>
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Table Number</th>
+            <th>Capacity</th>
+            <th>Restaurant</th>
+            <th>Status</th>
+            <th style="width:180px">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.TableNumber</td>
+                <td>@item.Capacity</td>
+                <td>@item.Restaurant?.Name</td>
+                <td>
+                    @switch (item.Status)
+                    {
+                        case TableStatus.Available:
+                            <span class="badge bg-success">Available</span>
+                            break;
+
+                        case TableStatus.Reserved:
+                            <span class="badge bg-danger">Reserved</span>
+                            break;
+
+                        case TableStatus.Occupied:
+                            <span class="badge bg-warning text-dark">Occupied</span>
+                            break;
+
+                        case TableStatus.Cleaning:
+                            <span class="badge bg-info text-dark">Cleaning</span>
+                            break;
+
+                        case TableStatus.OutOfService:
+                            <span class="badge bg-secondary">Out of Service</span>
+                            break;
+
+                        default:
+                            <span class="badge bg-light text-dark">@item.Status</span>
+                            break;
+                    }
+                </td>
+
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
