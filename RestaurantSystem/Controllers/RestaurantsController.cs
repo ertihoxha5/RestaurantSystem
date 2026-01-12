@@ -20,10 +20,21 @@ namespace RestaurantSystem.Controllers
         }
 
         // GET: Restaurants
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search)
         {
-            return View(await _context.Restaurants.ToListAsync());
+            var restaurants = _context.Restaurants.AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                restaurants = restaurants.Where(r =>
+                    r.Name.Contains(search) || r.Location.Contains(search));
+            }
+
+            ViewBag.Search = search;
+
+            return View(await restaurants.ToListAsync());
         }
+
 
         // GET: Restaurants/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -58,14 +69,31 @@ namespace RestaurantSystem.Controllers
         {
             restaurant.CreatedAt = DateTime.Now;
             restaurant.UpdatedAt = DateTime.Now;
+
             if (ModelState.IsValid)
             {
-                _context.Add(restaurant);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(restaurant);
+                    await _context.SaveChangesAsync();
+
+                    // Success alert
+                    TempData["Success"] = "Restaurant created successfully!";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    // Error alert
+                    TempData["Error"] = "Failed to create restaurant. " + ex.Message;
+                    return RedirectToAction(nameof(Index));
+                }
             }
+
+            // Validation errors
+            TempData["Error"] = "Please check the form for errors.";
             return View(restaurant);
         }
+
 
         // GET: Restaurants/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -92,31 +120,41 @@ namespace RestaurantSystem.Controllers
         {
             if (id != restaurant.Id)
             {
-                return NotFound();
+                TempData["Error"] = "Restaurant not found.";
+                return RedirectToAction(nameof(Index));
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    restaurant.UpdatedAt = DateTime.Now;
                     _context.Update(restaurant);
                     await _context.SaveChangesAsync();
+
+                    TempData["Success"] = "Restaurant updated successfully!";
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!RestaurantExists(restaurant.Id))
                     {
-                        return NotFound();
+                        TempData["Error"] = "Restaurant no longer exists.";
+                        return RedirectToAction(nameof(Index));
                     }
                     else
                     {
-                        throw;
+                        TempData["Error"] = "Failed to update restaurant. Please try again.";
+                        return RedirectToAction(nameof(Index));
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
+
+            // If validation fails, stay on edit page
+            TempData["Error"] = "Please check the form for errors.";
             return View(restaurant);
         }
+
 
         // GET: Restaurants/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -144,12 +182,28 @@ namespace RestaurantSystem.Controllers
             var restaurant = await _context.Restaurants.FindAsync(id);
             if (restaurant != null)
             {
-                _context.Restaurants.Remove(restaurant);
+                try
+                {
+                    _context.Restaurants.Remove(restaurant);
+                    await _context.SaveChangesAsync();
+
+                    // Success alert
+                    TempData["Success"] = "Restaurant deleted successfully!";
+                }
+                catch (Exception ex)
+                {
+                    // Error alert
+                    TempData["Error"] = "Failed to delete restaurant. " + ex.Message;
+                }
+            }
+            else
+            {
+                TempData["Error"] = "Restaurant not found.";
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool RestaurantExists(int id)
         {

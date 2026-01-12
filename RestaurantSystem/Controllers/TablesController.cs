@@ -19,8 +19,7 @@ namespace RestaurantSystem.Controllers
             _context = context;
         }
 
-        // GET: Tables
-        public async Task<IActionResult> Index(int? restaurantId)
+        public async Task<IActionResult> Index(int? restaurantId, int? searchNumber)
         {
             IQueryable<Table> tables = _context.Tables.Include(t => t.Restaurant);
 
@@ -33,12 +32,19 @@ namespace RestaurantSystem.Controllers
                 ViewBag.RestaurantId = restaurantId.Value;
             }
 
+            if (searchNumber.HasValue)
+            {
+                tables = tables.Where(t => t.TableNumber == searchNumber.Value);
+            }
+
+            ViewBag.SearchNumber = searchNumber;
+
             return View(await tables.ToListAsync());
         }
 
 
 
-        // GET: Tables/Details/5
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -57,7 +63,6 @@ namespace RestaurantSystem.Controllers
             return View(table);
         }
 
-        // GET: Tables/Create
         public IActionResult Create(int restaurantId)
         {
             if (restaurantId == 0)
@@ -98,20 +103,28 @@ namespace RestaurantSystem.Controllers
                                  .Select(e => e.ErrorMessage)
                                  .ToList();
 
-                // TEMP: See errors
                 ViewBag.Errors = errors;
 
                 return View(table);
             }
 
-            _context.Add(table);
-            await _context.SaveChangesAsync();
+            try
+            {
+                table.Status = TableStatus.Available; 
+                _context.Add(table);
+                await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", new { restaurantId = table.RestaurantId });
+                TempData["Success"] = "Table created successfully!";
+                return RedirectToAction("Index", new { restaurantId = table.RestaurantId });
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Failed to create table. " + ex.Message;
+                return RedirectToAction("Create", new { restaurantId = table.RestaurantId });
+            }
         }
 
 
-        // GET: Tables/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -154,31 +167,65 @@ namespace RestaurantSystem.Controllers
                 return NotFound();
             }
 
+            // Check if table number already exists (excluding current table)
+            bool tableNumberExists = await _context.Tables.AnyAsync(t =>
+                t.RestaurantId == table.RestaurantId &&
+                t.TableNumber == table.TableNumber &&
+                t.Id != table.Id
+            );
+
+            if (tableNumberExists)
+            {
+                // Add a ModelState error for the TableNumber field
+                ModelState.AddModelError("TableNumber", $"Table number {table.TableNumber} already exists for this restaurant.");
+            }
+
             if (ModelState.IsValid)
             {
                 try
                 {
                     _context.Update(table);
                     await _context.SaveChangesAsync();
+                    TempData["Success"] = "Table updated successfully!";
+                    return RedirectToAction("Index", new { restaurantId = table.RestaurantId });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!TableExists(table.Id))
                     {
-                        return NotFound();
+                        TempData["Error"] = "Table no longer exists.";
+                        return RedirectToAction("Index", new { restaurantId = table.RestaurantId });
                     }
                     else
                     {
-                        throw;
+                        ModelState.AddModelError("", "Failed to update table due to concurrency issue.");
                     }
                 }
-                return RedirectToAction("Index", new { restaurantId = table.RestaurantId });
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Failed to update table. " + ex.Message);
+                }
             }
-            ViewData["RestaurantId"] = new SelectList(_context.Restaurants, "Id", "Location", table.RestaurantId);
+
+            // Reload dropdown
+            ViewBag.StatusList = Enum.GetValues(typeof(TableStatus))
+                          .Cast<TableStatus>()
+                          .Select(s => new SelectListItem
+                          {
+                              Value = s.ToString(),
+                              Text = s.ToString()
+                          })
+                          .ToList();
+
+            var restaurant = await _context.Restaurants.FindAsync(table.RestaurantId);
+            ViewBag.RestaurantName = restaurant?.Name;
+
             return View(table);
         }
 
-        // GET: Tables/Delete/5
+
+
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -195,14 +242,12 @@ namespace RestaurantSystem.Controllers
                 return NotFound();
             }
 
-            // Add restaurant name for the view
             ViewBag.RestaurantName = table.Restaurant?.Name;
 
             return View(table);
         }
 
 
-        // POST: Tables/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -210,12 +255,29 @@ namespace RestaurantSystem.Controllers
             var table = await _context.Tables.FindAsync(id);
             if (table != null)
             {
-                _context.Tables.Remove(table);
-            }
+                try
+                {
+                    _context.Tables.Remove(table);
+                    await _context.SaveChangesAsync();
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+                    // Success alert
+                    TempData["Success"] = "Table deleted successfully!";
+                }
+                catch (Exception ex)
+                {
+                    // Error alert
+                    TempData["Error"] = "Failed to delete table. " + ex.Message;
+                }
+
+                return RedirectToAction("Index", new { restaurantId = table.RestaurantId });
+            }
+            else
+            {
+                TempData["Error"] = "Table not found.";
+                return RedirectToAction("Index");
+            }
         }
+
 
         private bool TableExists(int id)
         {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace RestaurantSystem.Models
 {
@@ -6,8 +7,11 @@ namespace RestaurantSystem.Models
     {
         public int Id { get; set; }
 
-        public int TableNumber { get; set; }
-        public int Capacity { get; set; }
+        [Required(ErrorMessage = "Table number is required")]
+        public int? TableNumber { get; set; }
+
+        [Required(ErrorMessage = "Capacity is required")]
+        public int? Capacity { get; set; }
 
         // Foreign Key
         public int RestaurantId { get; set; }
