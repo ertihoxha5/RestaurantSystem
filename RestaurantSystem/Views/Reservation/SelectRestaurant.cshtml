@@ -1,0 +1,28 @@
+﻿@using RestaurantSystem.Models.ViewModels
+@model SelectedRestaurantViewModel
+
+<h2 class="mb-4 mt-4 text-center">Select a Restaurant</h2>
+
+<div class="container">
+    <div class="list-group">
+
+        @foreach (var restaurant in Model.Restaurants)
+        {
+            <div class="list-group-item list-group-item-action d-flex
+                            justify-content-between align-items-center mb-2 shadow-sm rounded">
+
+                <div>
+                    <h5 class="mb-1">@restaurant.Name</h5>
+                    <small class="text-muted">@restaurant.Location</small>
+                </div>
+
+                <a asp-action="Details"
+                   asp-route-restaurantId="@restaurant.Id"
+                   class="btn btn-success btn-sm rounded-pill px-4">
+                    Select
+                </a>
+            </div>
+        }
+
+    </div>
+</div>

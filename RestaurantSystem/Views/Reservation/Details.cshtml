@@ -1,0 +1,39 @@
+﻿@model RestaurantSystem.Models.ViewModels.ReservationDetailsViewModel
+
+@{
+    ViewData["Title"] = "Reservation Details";
+}
+
+<div class="container mt-5" style="max-width: 500px;">
+    <h2 class="mb-4 text-center">Make a Reservation</h2>
+
+    <div asp-validation-summary="All" class="alert alert-danger"></div>
+
+    <form asp-action="Details" method="post">
+        <input type="hidden" asp-for="RestaurantId" />
+
+        <div class="mb-3">
+            <label asp-for="StartTime" class="form-label">Date & Time</label>
+            <input asp-for="StartTime"
+                   type="datetime-local"
+                   class="form-control"
+                   min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+            <span asp-validation-for="StartTime" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="NumberOfGuests" class="form-label">Guests</label>
+            <input asp-for="NumberOfGuests"
+                   type="number"
+                   class="form-control"
+                   min="1"
+                   max="20"
+                   placeholder="Enter number of guests" />
+            <span asp-validation-for="NumberOfGuests" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">
+            Check Availability
+        </button>
+    </form>
+</div>

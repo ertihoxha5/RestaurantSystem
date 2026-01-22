@@ -24,5 +24,8 @@ namespace RestaurantSystem.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
+        [Range(40, 240)]
+        public int ReservationDurationTime { get; set; } = 120;
     }
 }

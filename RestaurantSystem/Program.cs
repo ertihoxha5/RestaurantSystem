@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyProject.Data;
-using RestaurantSystem.Data;
+using RestaurantSystem.Services;
+//using RestaurantSystem.Data;
 //using MyProject.Data;
 
 public class Program {
@@ -21,6 +22,8 @@ public class Program {
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
         builder.Services.AddControllersWithViews();
+
+        builder.Services.AddScoped<TableAssignmentService>();
 
         var app = builder.Build();
 
