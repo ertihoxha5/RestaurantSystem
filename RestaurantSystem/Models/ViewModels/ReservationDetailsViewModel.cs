@@ -9,7 +9,7 @@ namespace RestaurantSystem.Models.ViewModels
         public DateTime? StartTime { get; set; }
 
         [Required]
-        [Range(1, 20)]
+        [Range(1, 20, ErrorMessage = "Number of guests must be at least 1.")]
         public int NumberOfGuests {  get; set; }
     }
 }

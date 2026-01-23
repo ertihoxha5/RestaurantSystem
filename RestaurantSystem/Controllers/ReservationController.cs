@@ -152,5 +152,120 @@ namespace RestaurantSystem.Controllers
             return View(reservation);
         }
 
+        [Authorize]
+        public async Task<IActionResult> MyReservations()
+        {
+            var userId= User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var reservations = await _context.Reservations
+                .Where(r => r.UserId == userId)
+                .Include(r => r.Restaurant)
+                .Include(r => r.Table)
+                .OrderByDescending(r => r.StartTime).ToListAsync();
+
+            return View(reservations);
+
+        }
+
+        [Authorize(Roles ="Admin")]
+
+        public async Task<IActionResult> AllReservations()
+        {
+            var reservations = await _context.Reservations
+                .Include(r => r.Restaurant)
+                .Include(r => r.Table)
+                .Include(r => r.ClientProfile)
+                .OrderByDescending(r => r.StartTime)
+                .ToListAsync();
+
+            return View(reservations);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Cancel(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var reservation = await _context.Reservations
+                .FirstOrDefaultAsync(r => r.Id == id && r.UserId == userId);
+
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+
+            reservation.Status = ReservationStatus.Cancelled;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(MyReservations));
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var reservation = await _context.Reservations
+                .Include(r=>r.Restaurant)
+                .Include(r => r.Table)
+                .FirstOrDefaultAsync(r => r.Id == id);
+
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+
+            var vm = new ReservationEditViewModel
+            {
+                Id = reservation.Id,
+                RestaurantId = reservation.RestaurantId,
+                RestaurantName=reservation.Restaurant.Name,
+                StartTime = reservation.StartTime,
+                NumberOfGuests = reservation.NumberOfGuests
+            };
+            return View(vm);
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> Edit(ReservationEditViewModel vm)
+        {
+            if (!ModelState.IsValid)
+                return View(vm);
+
+            var reservation = await _context.Reservations
+            .Include(r => r.Restaurant)
+            .FirstOrDefaultAsync(r => r.Id == vm.Id);
+
+
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+
+            if(reservation.StartTime!=vm.StartTime || reservation.NumberOfGuests != vm.NumberOfGuests)
+            {
+                var table = await _tableAssignmentService.FindAvailableTable(
+                    reservation.RestaurantId,
+                    vm.StartTime,
+                    vm.NumberOfGuests,
+                    reservation.Restaurant.ReservationDurationTime
+                    );
+
+                if (table == null)
+                {
+                    ModelState.AddModelError("", "No available tables for this time/guest number.");
+                    return View(vm);
+                }
+                reservation.TableId = table.Id;
+            }
+            reservation.StartTime = vm.StartTime;
+            reservation.EndTime = vm.StartTime.AddMinutes(reservation.Restaurant.ReservationDurationTime);
+            reservation.NumberOfGuests = vm.NumberOfGuests;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("MyReservations");
+
+        }
+
     }
 }

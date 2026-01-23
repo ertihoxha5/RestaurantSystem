@@ -1,0 +1,116 @@
+﻿@model List<Reservation>
+@using RestaurantSystem.Models.Enums
+
+@{
+    var now = DateTime.Now;
+    var activeReservations = Model
+    .Where(r => r.Status != ReservationStatus.Cancelled && r.EndTime > now)
+    .ToList();
+
+    var pastReservations = Model
+    .Where(r => r.Status == ReservationStatus.Cancelled || r.EndTime <= now)
+    .ToList();
+}
+<div class="container my-5">
+    <div class="card shadow-sm mb-5">
+        <div class="card-header bg-white">
+            <h4 class="mb-0">Upcoming Reservations</h4>
+        </div>
+
+        <div class="card-body p-0">
+            @if (!activeReservations.Any())
+            {
+                <div class="alert alert-info m-3">
+                    You have no upcoming reservations.
+                </div>
+            }
+            else
+            {
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Restaurant</th>
+                            <th>Table</th>
+                            <th>Guests</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in activeReservations)
+                        {
+                            <tr>
+                                <td>@r.Restaurant.Name</td>
+                                <td>@r.Table.TableNumber</td>
+                                <td>@r.NumberOfGuests</td>
+                                <td>@r.StartTime.ToString("MMM dd, HH:mm")</td>
+                                <td>@r.EndTime.ToString("MMM dd, HH:mm")</td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm">
+                                        <a asp-action="Edit"
+                                           asp-route-id="@r.Id"
+                                           class="btn btn-outline-primary">
+                                            Edit
+                                        </a>
+                                        <form asp-action="Cancel"
+                                              asp-route-id="@r.Id"
+                                              method="post"
+                                              onsubmit="return confirm('Cancel this reservation?');">
+                                            <button class="btn btn-outline-danger">
+                                                Cancel
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+
+@if (pastReservations.Any())
+{
+        <div class="card shadow-sm">
+            <div class="card-header bg-light">
+                <h5 class="mb-0 text-muted">Past Reservations</h5>
+            </div>
+
+            <div class="card-body p-0">
+                <table class="table table-sm table-secondary mb-0">
+                    <thead>
+                        <tr>
+                            <th>Restaurant</th>
+                            <th>Guests</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in pastReservations)
+                        {
+                            <tr>
+                                <td>@r.Restaurant.Name</td>
+                                <td>@r.NumberOfGuests</td>
+                                <td>@r.StartTime.ToString("MMM dd, HH:mm")</td>
+                                <td>@r.EndTime.ToString("MMM dd, HH:mm")</td>
+                                <td>
+                                    @if (r.Status == ReservationStatus.Cancelled)
+                                    {
+                                        <span class="badge bg-secondary">Cancelled</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">Completed</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+}
