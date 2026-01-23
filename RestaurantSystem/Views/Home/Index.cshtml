@@ -1,76 +1,184 @@
 ﻿@{
-    ViewData["Title"] = "Mirë se vini!";
+    ViewData["Title"] = "Kryefaqja";
 }
 
 <!-- HERO SECTION -->
-<section class="hero min-vh-100 d-flex align-items-center position-relative overflow-hidden"
-         style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/hero.jpg') center/cover no-repeat;">
-    <div class="container position-relative z-3">
-        <div class="row justify-content-center text-center text-white">
-            <div class="col-lg-8">
-                <h1 class="display-1 fw-bold mb-4 animate__animated animate__fadeInDown">
-                    Mirë se vini në <span class="text-warning">Restaurantin tonë</span>
+<section class="bg-dark text-white position-relative overflow-hidden">
+    <div class="container py-5">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6">
+                <h1 class="display-3 fw-bold mb-4" style="font-family:'Playfair Display', serif;">
+                    Rezervime elegante.<br />Eksperiencë perfekte.
                 </h1>
-                <p class="lead fs-3 mb-5 animate__animated animate__fadeInUp">
-                    Ushqim i shijshëm, ambient magjik, kujtime të paharrueshme.
+                <p class="lead mb-4 opacity-75">
+                    Restaurant System ju ofron një mënyrë moderne, të shpejtë dhe të sigurt
+                    për të rezervuar tavolina dhe menaxhuar përvojën tuaj gastronomike.
                 </p>
 
                 @if (!User.Identity.IsAuthenticated)
                 {
-                    <div class="animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
-                        <a asp-area="Identity" asp-page="/Account/Register"
-                           class="btn btn-warning btn-lg px-5 py-3 rounded-pill shadow-lg me-3">
-                            <i class="bi bi-person-plus"></i> Regjistrohu
-                        </a>
-                        <a asp-area="Identity" asp-page="/Account/Login"
-                           class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill shadow-lg">
-                            <i class="bi bi-box-arrow-in-right"></i> Kyçu
-                        </a>
-                    </div>
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-warning btn-lg me-3 px-4">
+                        Fillo Tani
+                    </a>
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-lg px-4">
+                        Kyçu
+                    </a>
                 }
                 else
                 {
-                    <a asp-controller="Reservation" asp-action="Create"
-                       class="btn btn-success btn-lg px-5 py-3 rounded-pill shadow-lg animate__animated animate__pulse animate__infinite">
-                        <i class="bi bi-calendar-check"></i> Rezervo Tani
+                    <a asp-controller="Reservation" asp-action="Create" class="btn btn-warning btn-lg px-5">
+                        Rezervo Tavolinë
                     </a>
                 }
             </div>
+
+            <div class="col-lg-6 d-none d-lg-block text-center">
+                <i class="bi bi-cup-hot-fill display-1 text-warning opacity-75"></i>
+            </div>
         </div>
-    </div>
-    <div class="position-absolute bottom-0 start-50 translate-middle-x text-white mb-3">
-        <i class="bi bi-chevron-down fs-1 animate__animated animate__bounce animate__infinite"></i>
     </div>
 </section>
 
-<!-- INFO SECTION -->
-<section class="py-5 bg-light">
+<!-- ABOUT -->
+<section class="container my-5 py-5">
+    <div class="row align-items-center">
+        <div class="col-md-6 mb-4">
+            <h2 class="fw-bold mb-3">Përse Restaurant System?</h2>
+            <p class="text-muted fs-5">
+                Ky sistem është ndërtuar për të përmirësuar eksperiencën e klientëve
+                dhe për të ofruar një proces rezervimi të thjeshtë, transparent dhe efikas.
+            </p>
+            <ul class="list-unstyled fs-5">
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-warning"></i> Rezervime online 24/7</li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-warning"></i> Interfejs modern & intuitiv</li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-warning"></i> Siguri maksimale e të dhënave</li>
+            </ul>
+        </div>
+        <div class="col-md-6 text-center">
+            <i class="bi bi-shop display-1 text-warning"></i>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICES -->
+<section class="bg-light py-5">
     <div class="container">
-        <div class="row text-center">
-            <div class="col-md-4 mb-4">
-                <div class="p-4 rounded-3 shadow-sm bg-white h-100">
-                    <i class="bi bi-award fs-1 text-warning mb-3"></i>
-                    <h4 class="fw-bold">Cilësi Premium</h4>
-                    <p class="text-muted">Përbërës të freskët, çdo ditë.</p>
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Shërbimet Tona</h2>
+            <p class="text-muted fs-5">Dizajnuar për komoditet dhe efikasitet</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 shadow border-0 text-center p-4">
+                    <i class="bi bi-calendar-event fs-1 text-warning mb-3"></i>
+                    <h5 class="fw-bold">Rezervim i Menjëhershëm</h5>
+                    <p class="text-muted">
+                        Pa telefonata, pa pritje – gjithçka online.
+                    </p>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="p-4 rounded-3 shadow-sm bg-white h-100">
-                    <i class="bi bi-people fs-1 text-success mb-3"></i>
-                    <h4 class="fw-bold">Shërbim i Shkëlqyer</h4>
-                    <p class="text-muted">Stafi ynë është këtu për ty.</p>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow border-0 text-center p-4">
+                    <i class="bi bi-person-badge fs-1 text-warning mb-3"></i>
+                    <h5 class="fw-bold">Profil i Personalizuar</h5>
+                    <p class="text-muted">
+                        Menaxho rezervimet dhe të dhënat personale.
+                    </p>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="p-4 rounded-3 shadow-sm bg-white h-100">
-                    <i class="bi bi-clock-history fs-1 text-primary mb-3"></i>
-                    <h4 class="fw-bold">Rezervim 24/7</h4>
-                    <p class="text-muted">Rezervo kur të duash.</p>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow border-0 text-center p-4">
+                    <i class="bi bi-shield-check fs-1 text-warning mb-3"></i>
+                    <h5 class="fw-bold">Siguri e Avancuar</h5>
+                    <p class="text-muted">
+                        Standarde të larta për mbrojtjen e privatësisë.
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ANIMACIONE -->
-<link href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animation.css" rel="stylesheet">
+<!-- STATS -->
+<section class="container py-5">
+    <div class="row text-center">
+        <div class="col-md-3 mb-4">
+            <h1 class="fw-bold text-warning">24/7</h1>
+            <p class="text-muted">Rezervime Aktive</p>
+        </div>
+        <div class="col-md-3 mb-4">
+            <h1 class="fw-bold text-warning">100%</h1>
+            <p class="text-muted">Online System</p>
+        </div>
+        <div class="col-md-3 mb-4">
+            <h1 class="fw-bold text-warning">Fast</h1>
+            <p class="text-muted">Proces Rezervimi</p>
+        </div>
+        <div class="col-md-3 mb-4">
+            <h1 class="fw-bold text-warning">Secure</h1>
+            <p class="text-muted">Data Protection</p>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="bg-dark text-white py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Çfarë thonë klientët?</h2>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="p-4 border rounded h-100">
+                    <p class="fst-italic">
+                        “Një sistem shumë profesional dhe i lehtë për përdorim.”
+                    </p>
+                    <strong>— Filan F.</strong>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 border rounded h-100">
+                    <p class="fst-italic">
+                        “Rezervimi u krye për disa sekonda, shumë praktike.”
+                    </p>
+                    <strong>— Filane F.</strong>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 border rounded h-100">
+                    <p class="fst-italic">
+                        “Dizajn modern dhe funksionalitet perfekt.”
+                    </p>
+                    <strong>— Emërtim M.</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="bg-warning text-dark text-center py-5">
+    <div class="container">
+        <h2 class="fw-bold mb-3">Bëje rezervimin sot</h2>
+        <p class="fs-5 mb-4">
+            Shijo ushqim cilësor dhe shërbim profesional.
+        </p>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-controller="Reservation" asp-action="Create" class="btn btn-dark btn-lg px-5">
+                Rezervo Tani
+            </a>
+        }
+        else
+        {
+            <a asp-controller="Account" asp-action="Register" class="btn btn-dark btn-lg px-5">
+                Krijo Llogari
+            </a>
+        }
+    </div>
+</section>

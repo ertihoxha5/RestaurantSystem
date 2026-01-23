@@ -1,44 +1,152 @@
 ﻿@model RestaurantSystem.Models.Table
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Table Details";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="bi bi-table"></i> Table Details</h4>
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning btn-sm me-2">
+                    <i class="bi bi-pencil-square"></i> Edit
+                </a>
+                <a asp-action="Index" class="btn btn-secondary btn-sm">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
 
-<div>
-    <h4>Table</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TableNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TableNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Capacity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Capacity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Restaurant)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Restaurant.Location)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-    </dl>
+        <div class="card-body">
+
+            <!-- FILTER AND SORT -->
+            <div class="row mb-4">
+                <div class="col-md-6 mb-2">
+                    <input type="text" id="filterInput" class="form-control" placeholder="Filter by text (e.g., status or restaurant)..." onkeyup="filterTable()" />
+                </div>
+                <div class="col-md-6 mb-2 text-end">
+                    <select id="sortSelect" class="form-select w-auto d-inline" onchange="sortTable()">
+                        <option value="">Sort By</option>
+                        <option value="TableNumber">Table Number</option>
+                        <option value="Capacity">Capacity</option>
+                        <option value="Status">Status</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- DETAILS TABLE -->
+            <table class="table table-hover table-bordered" id="detailsTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Table Number</th>
+                        <th>Capacity</th>
+                        <th>Restaurant</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.TableNumber</td>
+                        <td>@Model.Capacity</td>
+                        <td>@Model.Restaurant?.Name</td>
+                        <td>
+                            @switch (Model.Status)
+                            {
+                                case TableStatus.Available:
+                                    <span class="badge bg-success fs-6"><i class="bi bi-check-circle me-1"></i>Available</span>
+                                    break;
+                                case TableStatus.Reserved:
+                                    <span class="badge bg-danger fs-6"><i class="bi bi-clock-history me-1"></i>Reserved</span>
+                                    break;
+                                case TableStatus.Occupied:
+                                    <span class="badge bg-warning text-dark fs-6"><i class="bi bi-person-fill me-1"></i>Occupied</span>
+                                    break;
+                                case TableStatus.Cleaning:
+                                    <span class="badge bg-info text-dark fs-6"><i class="bi bi-bucket me-1"></i>Cleaning</span>
+                                    break;
+                                case TableStatus.OutOfService:
+                                    <span class="badge bg-secondary fs-6"><i class="bi bi-slash-circle me-1"></i>Out of Service</span>
+                                    break;
+                                default:
+                                    <span class="badge bg-light text-dark fs-6">@Model.Status</span>
+                                    break;
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Highlight if capacity is high -->
+            @if (Model.Capacity >= 8)
+            {
+                <div class="alert alert-info mt-3" role="alert">
+                    <i class="bi bi-info-circle me-1"></i> This is a large table suitable for groups.
+                </div>
+            }
+
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+@section Scripts {
+    <script>
+        // Animate badges
+        document.addEventListener("DOMContentLoaded", function () {
+            const badges = document.querySelectorAll('.badge');
+            badges.forEach((b, index) => {
+                b.style.opacity = 0;
+                setTimeout(() => {
+                    b.style.transition = "opacity 0.8s ease";
+                    b.style.opacity = 1;
+                }, index * 200);
+            });
+        });
+
+        // Filter function
+        function filterTable() {
+            let input = document.getElementById("filterInput").value.toLowerCase();
+            let table = document.getElementById("detailsTable");
+            let trs = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < trs.length; i++) {
+                let cells = trs[i].getElementsByTagName("td");
+                let show = false;
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].innerText.toLowerCase().includes(input)) {
+                        show = true;
+                        break;
+                    }
+                }
+                trs[i].style.display = show ? "" : "none";
+            }
+        }
+
+        // Sort function
+        function sortTable() {
+            let table = document.getElementById("detailsTable");
+            let rows = Array.from(table.rows).slice(1);
+            let sortBy = document.getElementById("sortSelect").value;
+
+            if (!sortBy) return;
+
+            rows.sort((a, b) => {
+                let aText = a.querySelector(`td:nth-child(${getColumnIndex(sortBy)})`).innerText;
+                let bText = b.querySelector(`td:nth-child(${getColumnIndex(sortBy)})`).innerText;
+                return aText.localeCompare(bText, undefined, {numeric:true});
+            });
+
+            rows.forEach(r => table.tBodies[0].appendChild(r));
+        }
+
+        function getColumnIndex(field) {
+            switch(field) {
+                case "TableNumber": return 1;
+                case "Capacity": return 2;
+                case "Status": return 4;
+                default: return 1;
+            }
+        }
+    </script>
+}

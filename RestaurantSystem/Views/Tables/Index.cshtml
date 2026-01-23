@@ -39,16 +39,15 @@
     </div>
 </form>
 
-
-
-<table class="table table-striped table-bordered">
+<!-- Table with sortable columns -->
+<table class="table table-striped table-bordered" id="tablesTable">
     <thead class="table-dark">
         <tr>
-            <th>Table Number</th>
-            <th>Capacity</th>
-            <th>Restaurant</th>
-            <th>Status</th>
-            <th style="width:180px">Actions</th>
+            <th onclick="sortTable(0)" style="cursor:pointer;">Table Number <i class="bi bi-arrow-down-up"></i></th>
+            <th onclick="sortTable(1)" style="cursor:pointer;">Capacity <i class="bi bi-arrow-down-up"></i></th>
+            <th onclick="sortTable(2)" style="cursor:pointer;">Restaurant <i class="bi bi-arrow-down-up"></i></th>
+            <th onclick="sortTable(3)" style="cursor:pointer;">Status <i class="bi bi-arrow-down-up"></i></th>
+            <th style="width:220px">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -86,18 +85,19 @@
                             break;
                     }
                 </td>
-
-
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">View</a>
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
 @section Scripts {
     <script>
+        // Auto-hide alerts
         window.setTimeout(function () {
             var alerts = document.querySelectorAll('.auto-hide-alert');
             alerts.forEach(function (alert) {
@@ -107,7 +107,44 @@
                     alert.remove();
                 }, 500);
             });
-        }, 2500); // 4 seconds
+        }, 2500);
 
+        // Simple sort for table
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("tablesTable");
+            switching = true;
+            dir = "asc";
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    if (dir == "asc") {
+                        if (x.innerText.toLowerCase() > y.innerText.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerText.toLowerCase() < y.innerText.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount ++;
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
     </script>
 }

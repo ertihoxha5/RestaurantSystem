@@ -1,99 +1,140 @@
 ﻿@{
-    ViewData["Title"] = "Admin Dashboard";
+    ViewData["Title"] = "Dashboard";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-<div class="container mt-5 pt-4">
 
-    <!-- DASHBOARD CARDS -->
-    <div class="row g-4 mb-4">
-
-        <div class="col-md-3">
-            <div class="card shadow-sm text-center p-3">
-                <h5>Total Users</h5>
-                <h2 class="text-primary">1,245</h2>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card shadow-sm text-center p-3">
-                <h5>Active Orders</h5>
-                <h2 class="text-success">312</h2>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card shadow-sm text-center p-3">
-                <h5>Pending Tickets</h5>
-                <h2 class="text-warning">24</h2>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card shadow-sm text-center p-3">
-                <h5>Revenue Today</h5>
-                <h2 class="text-danger">$1,892</h2>
-            </div>
-        </div>
-
+<!-- PAGE HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold mb-1">Dashboard</h3>
+        <p class="text-muted mb-0">Restaurant reservation administration panel</p>
     </div>
+</div>
 
-    <!-- RECENT ACTIVITY TABLE -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-dark text-white">
-            Recent User Activity
-        </div>
-        <div class="card-body p-0">
-            <table class="table table-striped mb-0">
-                <thead class="table-dark">
-                    <tr>
-                        <th>User</th>
-                        <th>Action</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>John Doe</td>
-                        <td>Created an Order</td>
-                        <td>2025-01-14</td>
-                        <td><span class="badge bg-success">Completed</span></td>
-                    </tr>
-                    <tr>
-                        <td>Maria Smith</td>
-                        <td>Updated Profile</td>
-                        <td>2025-01-14</td>
-                        <td><span class="badge bg-info">Info</span></td>
-                    </tr>
-                    <tr>
-                        <td>Michael Lee</td>
-                        <td>Payment Failed</td>
-                        <td>2025-01-14</td>
-                        <td><span class="badge bg-danger">Failed</span></td>
-                    </tr>
-                    <tr>
-                        <td>Sara Wilson</td>
-                        <td>Requested Support</td>
-                        <td>2025-01-13</td>
-                        <td><span class="badge bg-warning text-dark">Pending</span></td>
-                    </tr>
-                </tbody>
-            </table>
+<!-- QUICK ACTIONS -->
+<div class="row g-4 mb-5">
+
+    <div class="col-md-3">
+        <div class="card action-card text-center p-4">
+            <div class="icon-circle bg-warning text-dark mb-3">
+                <i class="bi bi-shop"></i>
+            </div>
+            <h6 class="fw-semibold">Restaurants</h6>
+            <small class="text-muted">Add & manage restaurants</small>
+            <a asp-controller="Restaurants" asp-action="Index" class="stretched-link"></a>
         </div>
     </div>
 
-    <!-- ANNOUNCEMENTS -->
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            Announcements
+    <div class="col-md-3">
+        <div class="card action-card text-center p-4">
+            <div class="icon-circle bg-success text-white mb-3">
+                <i class="bi bi-calendar-check"></i>
+            </div>
+            <h6 class="fw-semibold">Reservations</h6>
+            <small class="text-muted">View booking system</small>
+            <a asp-controller="Reservations" asp-action="Index" class="stretched-link"></a>
         </div>
-        <div class="card-body">
-            <ul>
-                <li>New dashboard update rolling out next week.</li>
-                <li>System maintenance scheduled for 15 February.</li>
-                <li>Performance improvements added to user analytics.</li>
-            </ul>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card action-card text-center p-4">
+            <div class="icon-circle bg-primary text-white mb-3">
+                <i class="bi bi-people-fill"></i>
+            </div>
+            <h6 class="fw-semibold">Users</h6>
+            <small class="text-muted">Manage customers & admins</small>
+            <a asp-controller="Users" asp-action="Index" class="stretched-link"></a>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card action-card text-center p-4">
+            <div class="icon-circle bg-dark text-white mb-3">
+                <i class="bi bi-person-circle"></i>
+            </div>
+            <h6 class="fw-semibold">My Profile</h6>
+            <small class="text-muted">Account settings</small>
+            <a asp-controller="Admin" asp-action="Profile" class="stretched-link"></a>
         </div>
     </div>
 
 </div>
+
+<!-- WELCOME / INFO PANEL -->
+<div class="row g-4 mb-4">
+
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header fw-bold">
+                 Welcome, Admin
+            </div>
+            <div class="card-body">
+                <p>
+                    This panel allows you to manage restaurants, reservations and users
+                    from a single place. Use the menu on the left or the quick actions
+                    above to navigate through the system.
+                </p>
+                <p class="mb-0 text-muted">
+                    Designed for efficient restaurant reservation management.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header fw-bold">
+                 How to use the system
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    <li>Add restaurants before accepting reservations</li>
+                    <li>Review reservations regularly</li>
+                    <li>Manage users and roles carefully</li>
+                    <li>Keep restaurant information up to date</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ANNOUNCEMENTS -->
+<div class="card shadow-sm">
+    <div class="card-header bg-warning fw-bold">
+        <i class="bi bi-megaphone"></i> Announcements
+    </div>
+    <div class="card-body">
+        <ul class="mb-0">
+            <li>Restaurant reservation system is running in admin mode</li>
+            <li>New features will be added in upcoming updates</li>
+            <li>Ensure all restaurants follow platform guidelines</li>
+        </ul>
+    </div>
+</div>
+
+<style>
+    .action-card {
+        border-radius: 16px;
+        border: none;
+        transition: all 0.25s ease;
+        cursor: pointer;
+    }
+
+        .action-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 30px rgba(0,0,0,0.12);
+            background-color: #ffffff;
+        }
+
+    .icon-circle {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        margin: 0 auto;
+    }
+</style>
