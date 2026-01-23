@@ -1,0 +1,109 @@
+﻿@model RestaurantSystem.Models.ViewModels.AdminReservationViewModel
+@using RestaurantSystem.Models.Enums
+
+@{
+    ViewData["Title"] = "All Reservations";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container my-5">
+
+    <h2 class="mb-4"> Reservations</h2>
+
+   
+    <h4 class="mb-3">Today's Reservations</h4>
+    @if (!Model.TodaysReservations.Any())
+    {
+        <div class="alert alert-info">
+            No reservations for today.
+        </div>
+    }
+    else
+    {
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Restaurant</th>
+                    <th>Table</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.TodaysReservations)
+                {
+                    <tr>
+                        <td>@r.Restaurant.Name</td>
+                        <td>@r.Table.TableNumber</td>
+                        <td>@r.ClientProfile.FirstName</td>
+                        <td>@r.ClientProfile.LastName</td>
+                        <td>@r.StartTime.ToString("MMM dd, HH:mm")</td>
+                        <td>@r.EndTime.ToString("MMM dd, HH:mm")</td>
+                        <td>
+                            @if (r.Status == ReservationStatus.Cancelled)
+                            {
+                                <span class="badge bg-secondary">Cancelled</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">Completed</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+ 
+    <h4 class="mt-5 mb-3">Upcoming Reservations</h4>
+    @if (!Model.UpcomingReservations.Any())
+    {
+        <div class="alert alert-info">
+            No upcoming reservations.
+        </div>
+    }
+    else
+    {
+        <table class="table table-hover table-striped align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Restaurant</th>
+                    <th>Table</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.UpcomingReservations)
+                {
+                    <tr>
+                        <td>@r.Restaurant.Name</td>
+                        <td>@r.Table.TableNumber</td>
+                        <td>@r.ClientProfile.FirstName</td>
+                        <td>@r.ClientProfile.LastName</td>
+                        <td>@r.StartTime.ToString("MMM dd, HH:mm")</td>
+                        <td>@r.EndTime.ToString("MMM dd, HH:mm")</td>
+                        <td>
+                            @if (r.Status == ReservationStatus.Cancelled)
+                            {
+                                <span class="badge bg-secondary">Cancelled</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">Completed</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+</div>

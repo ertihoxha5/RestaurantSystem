@@ -171,14 +171,27 @@ namespace RestaurantSystem.Controllers
 
         public async Task<IActionResult> AllReservations()
         {
+
+            var now=DateTime.Now;
+            var today = DateTime.Today;
             var reservations = await _context.Reservations
                 .Include(r => r.Restaurant)
                 .Include(r => r.Table)
                 .Include(r => r.ClientProfile)
-                .OrderByDescending(r => r.StartTime)
+                .Where(r => r.Status != ReservationStatus.Cancelled)
+                .OrderBy(r => r.StartTime)
                 .ToListAsync();
 
-            return View(reservations);
+            var vm = new AdminReservationViewModel
+            {
+                TodaysReservations = reservations
+                .Where(r => r.StartTime.Date == today)
+                .ToList(),
+                UpcomingReservations=reservations
+                .Where(r=>r.StartTime.Date>today)
+                .ToList()
+            };
+            return View(vm);
         }
 
         [HttpPost]
