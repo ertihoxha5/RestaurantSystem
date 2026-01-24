@@ -4,9 +4,11 @@
 <div class="container mt-5">
     <div class="card shadow-sm">
         <div class="card-header bg-light text-black">
-            <h2 class="mb-0">Confirm Your Reservation</h2>
+            <h2 class="mb-0">Konfirmo Rezervimin</h2>
         </div>
         <div class="card-body">
+           
+
             <dl class="row">
                 <dt class="col-sm-3">Restaurant:</dt>
                 <dd class="col-sm-9">@Model.RestaurantName</dd>
@@ -25,20 +27,24 @@
             </dl>
 
             <form asp-action="Confirm" method="post" class="mt-4">
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div asp-validation-summary="All" class="alert alert-danger"></div>
+                }
                 <input type="hidden" asp-for="RestaurantId" />
                 <input type="hidden" asp-for="TableId" />
                 <input type="hidden" asp-for="StartTime" />
                 <input type="hidden" asp-for="EndTime" />
                 <input type="hidden" asp-for="NumberOfGuests" />
 
-                <button type="submit" class="btn btn-success me-2">
-                    Confirm Reservation
+                <button type="submit" class="btn btn-warning me-2">
+                    Konfirmo Rezervimin
                 </button>
 
                 <a asp-action="Details"
                    asp-route-restaurantId="@Model.RestaurantId"
                    class="btn btn-secondary">
-                    Change Details
+                    Ndrysho detajet
                 </a>
             </form>
         </div>

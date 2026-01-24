@@ -1,5 +1,19 @@
-﻿@using RestaurantSystem.Models.ViewModels
+﻿@*@using RestaurantSystem.Models.ViewModels
 @model SelectedRestaurantViewModel
+
+@if (!(bool)ViewBag.HasProfile)
+{
+    <div class="alert alert-warning">
+        <strong>Profile required.</strong><br />
+        Për të kryer rezervimin, ju duhet që fillimisht të krijoni profilin tuaj.
+        <a asp-controller="ClientProfile"
+           asp-action="Index"
+           class="alert-link">
+            Kliko këtu për të krijuar profilin.
+        </a>.
+    </div>
+}
+
 
 <h2 class="mb-4 mt-4 text-center">Select a Restaurant</h2>
 
@@ -16,13 +30,102 @@
                     <small class="text-muted">@restaurant.Location</small>
                 </div>
 
-                <a asp-action="Details"
-                   asp-route-restaurantId="@restaurant.Id"
-                   class="btn btn-success btn-sm rounded-pill px-4">
-                    Select
-                </a>
+                @if ((bool)ViewBag.HasProfile)
+                {
+                    <a asp-action="Details"
+                       asp-route-restaurantId="@restaurant.Id"
+                       class="btn btn-success btn-sm rounded-pill px-4">
+                        Select
+                    </a>
+                }
+                else
+                {
+                    <button class="btn btn-success btn-sm rounded-pill px-4"
+                            disabled
+                            title="Please complete your profile first">
+                        Select
+                    </button>
+                }
+
             </div>
         }
 
     </div>
+</div>
+*@
+@using RestaurantSystem.Models.ViewModels
+@model SelectedRestaurantViewModel
+
+<div class="container my-5">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <h2 class="text-center mb-4">
+                <i class="bi bi-shop me-2 text-warning"></i>
+                Select a Restaurant
+            </h2>
+
+            @if (!(bool)ViewBag.HasProfile)
+            {
+                <div class="alert alert-warning d-flex align-items-start">
+                    <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+                    <div>
+                        <strong>Profile required</strong><br />
+                        Për të krijuar rezervimin, ju duhet fillimisht tëkrijoni profilin tuaj.
+                        <a asp-controller="ClientProfile"
+                           asp-action="Index"
+                           class="alert-link">
+                            Krijo profilin këtu. 
+                        </a>.
+                    </div>
+                </div>
+            }
+
+            <div class="list-group mt-4">
+
+                @foreach (var restaurant in Model.Restaurants)
+                {
+                    <div class="list-group-item shadow-sm rounded mb-3">
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-1">
+                                    <i class="bi bi-building me-1 text-warning"></i>
+                                    @restaurant.Name
+                                </h5>
+                                <small class="text-muted">
+                                    <i class="bi bi-geo-alt me-1"></i>
+                                    @restaurant.Location
+                                </small>
+                            </div>
+
+                            @if ((bool)ViewBag.HasProfile)
+                            {
+                                <a asp-action="Details"
+                                   asp-route-restaurantId="@restaurant.Id"
+                                   class="btn btn-warning btn-sm px-4">
+                                    <i class="bi bi-arrow-right-circle me-1"></i>
+                                    Selekto
+                                </a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-warning btn-sm px-4"
+                                        disabled
+                                        title="Complete your profile first">
+                                    <i class="bi bi-lock-fill me-1"></i>
+                                    Select
+                                </button>
+                            }
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    </div>
+
 </div>

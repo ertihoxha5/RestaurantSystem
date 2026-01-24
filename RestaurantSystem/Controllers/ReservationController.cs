@@ -25,14 +25,24 @@ namespace RestaurantSystem.Controllers
             _tableAssignmentService= tableAssignmentService;
         }
 
+        [Authorize]
         public async Task<IActionResult> Create()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var hasProfile = await _context.ClientProfiles
+                .AnyAsync(cp => cp.UserId == userId);
+
+            ViewBag.HasProfile = hasProfile;
+
             var vm = new SelectedRestaurantViewModel
             {
                 Restaurants = await _context.Restaurants.ToListAsync()
             };
-            return View("SelectRestaurant",vm);
+
+            return View("SelectRestaurant", vm);
         }
+
 
         public IActionResult Index()
         {

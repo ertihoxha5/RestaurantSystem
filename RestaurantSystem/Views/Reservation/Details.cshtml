@@ -1,11 +1,11 @@
-﻿@model RestaurantSystem.Models.ViewModels.ReservationDetailsViewModel
+﻿@*@model RestaurantSystem.Models.ViewModels.ReservationDetailsViewModel
 
 @{
     ViewData["Title"] = "Reservation Details";
 }
 
 <div class="container mt-5" style="max-width: 500px;">
-    <h2 class="mb-4 text-center">Make a Reservation</h2>
+    <h2 class="mb-4 text-center">Krijo Rezervimin</h2>
 
     <div asp-validation-summary="All" class="alert alert-danger"></div>
 
@@ -36,4 +36,75 @@
             Check Availability
         </button>
     </form>
+</div>*@
+
+@model RestaurantSystem.Models.ViewModels.ReservationDetailsViewModel
+
+@{
+    ViewData["Title"] = "Reservation Details";
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-white text-center">
+                    <h4 class="mb-0">
+                        <i class="bi bi-calendar-check me-2 text-warning"></i>
+                        Krijo Rezervimin
+                    </h4>
+                </div>
+
+                <div class="card-body">
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div asp-validation-summary="All" class="alert alert-danger"></div>
+                    }
+
+                    <form asp-action="Details" method="post">
+                        <input type="hidden" asp-for="RestaurantId" />
+
+                        <div class="mb-3">
+                            <label asp-for="StartTime" class="form-label">
+                                <i class="bi bi-clock me-1 text-warning"></i>
+                                Date & Time
+                            </label>
+                            <input asp-for="StartTime"
+                                   type="datetime-local"
+                                   class="form-control"
+                                   min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                            <span asp-validation-for="StartTime"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="NumberOfGuests" class="form-label">
+                                <i class="bi bi-people me-1 text-warning"></i>
+                                Guests
+                            </label>
+                            <input asp-for="NumberOfGuests"
+                                   type="number"
+                                   class="form-control"
+                                   min="1"
+                                   max="20"
+                                   placeholder="Enter number of guests" />
+                            <span asp-validation-for="NumberOfGuests"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-warning w-100">
+                            <i class="bi bi-search me-1"></i>
+                            Check Availability
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
+
